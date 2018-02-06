@@ -30,7 +30,6 @@
 
     document.getElementById('butAddCity').addEventListener('click', function () {
 
-
         var select = document.getElementById('selectTimetableToAdd');
         var selected = select.options[select.selectedIndex];
         var key = selected.value;
@@ -40,6 +39,7 @@
         }
         app.getSchedule(key, label);
         app.selectedTimetables.push({key: key, label: label});
+        app.saveSelectedTimetebleCard();
         app.toggleAddDialog(false);
     });
 
@@ -103,6 +103,10 @@
         }
     };
 
+
+
+
+
     /*****************************************************************************
      *
      * Methods for dealing with the model
@@ -141,6 +145,10 @@
             app.getSchedule(key);
         });
     };
+app.saveSelectedTimetebleCard = function() {
+    var selectedTimetables = JSON.stringify(app.selectedTimetables);
+    localStorage.selectedTimetables = selectedTimetables;
+  };
 
     /*
      * Fake timetable data that is presented when the user first uses the app,
@@ -181,7 +189,30 @@
      ************************************************************************/
 
     app.getSchedule('metros/1/bastille/A', 'Bastille, Direction La Défense');
+
+    app.selectedTimetables = localStorage.selectedTimetables;
+  if (app.selectedTimetables) {
+    app.selectedTimetables = JSON.parse(app.selectedTimetables);
+    app.selectedTimetables.forEach(function(city) {
+      app.getSchedule(city.key, city.label);
+    });
+  } else {
+    /* The user is using the app for the first time, or the user has not
+     * saved any cities, so show the user some fake data. A real app in this
+     * scenario could guess the user's location via IP lookup and then inject
+     * that data into the page.
+     */
+    app.updateSchedules(initialStationTimetable);
     app.selectedTimetables = [
-        {key: initialStationTimetable.key, label: initialStationTimetable.label}
+      {key: initialStationTimetable.key, label: initialStationTimetable.label}
     ];
+    app.saveSelectedTimetebleCard();
+  }
+  / service Worker/
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('./service-worker.js')
+             .then(function() { console.log('Service Worker Registered'); });
+  }
 })();
