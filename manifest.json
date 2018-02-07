@@ -1,0 +1,17 @@
+{
+  "name": "Weather",
+  "short_name": "Weather",
+  "icons": [{
+    "src": "images/336511_05047_1.jpg",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "images/metrodebogota.jpg",
+      "sizes": "144x144",
+      "type": "image/png"
+    }],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#3E4EB8",
+  "theme_color": "#2F3BA2"
+}
